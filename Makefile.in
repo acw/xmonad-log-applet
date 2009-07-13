@@ -1,0 +1,30 @@
+CC = @CC@
+SED = @SED@
+CFLAGS = @CFLAGS@ @GLIB_CFLAGS@ @DBUS_GLIB_CFLAGS@ @LIBPANEL_CFLAGS@
+LDFLAGS = @LDFLAGS@ @GLIB_LIBS@ @DBUS_GLIB_LIBS@ @LIBPANEL_LIBS@
+INSTALL_SH = @INSTALL@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = @libdir@
+libexecdir = @libexecdir@
+datarootdir = @datarootdir@
+serverdir = $(libdir)/bonobo/servers
+
+all: xmonad-log-applet xmonad-log-applet.server
+
+install:
+	$(INSTALL_SH) -C -m 0755 xmonad-log-applet ${libexecdir}
+	$(INSTALL_SH) -C -m 0644 xmonad-log-applet.server $(serverdir)
+	$(INSTALL_SH) -C -m 0644 xmonad48.png $(datarootdir)/icons/hicolor/48x48/apps
+
+xmonad-log-applet: main.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ main.c
+
+xmonad-log-applet.server: xmonad-log-applet.server.in
+	$(SED) -e 's!@LIBEXECDIR@!${libexecdir}!g' \
+	  	   -e 's!@DATAROOTDIR@!${datarootdir}!g' < $^ > $@
+
+clean:
+	rm -f xmonad-log-applet xmonad-log-applet.server
+
+

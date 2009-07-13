@@ -1,0 +1,29 @@
+<oaf_info>
+
+<oaf_server iid="OAFIID:XMonadLogApplet_Factory"
+	    type="exe"
+	    location="@LIBEXECDIR@/xmonad-log-applet">
+
+	<oaf_attribute name="repo_ids" type="stringv">
+		<item value="IDL:Bonobo/GenericFactory:1.0"/>
+		<item value="IDL:Bonobo/Unknown:1.0"/>
+	</oaf_attribute>
+	<oaf_attribute name="name" type="string" value="XMonad Log Factory"/>
+	<oaf_attribute name="description" type="string" value="XMonad Log Factory Description"/>
+</oaf_server>
+
+<oaf_server iid="OAFIID:XMonadLogApplet"
+	    type="factory"
+	    location="OAFIID:XMonadLogApplet_Factory">
+
+	<oaf_attribute name="repo_ids" type="stringv">
+		<item value="IDL:GNOME/Vertigo/PanelAppletShell:1.0"/>
+		<item value="IDL:Bonobo/Control:1.0"/>
+		<item value="IDL:Bonobo/Unknown:1.0"/>
+	</oaf_attribute>
+	<oaf_attribute name="name" type="string" value="XMonad Log Monitor"/>
+	<oaf_attribute name="description" type="string" value="Monitor your XMonad's log."/>
+	<oaf_attribute name="panel:icon" type="string" value="@DATAROOTDIR@/icons/hicolor/48x48/apps/xmonad48.png"/>
+</oaf_server>
+
+</oaf_info>
