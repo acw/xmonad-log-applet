@@ -3,3 +3,4 @@ config.log
 config.status
 xmonad-log-applet
 xmonad-log-applet.server
+.*.swp
