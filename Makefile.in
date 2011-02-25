@@ -10,6 +10,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 datarootdir = @datarootdir@
 serverdir = $(libdir)/bonobo/servers
+
 DESTDIR?=
 
 all: xmonad-log-applet xmonad-log-applet.server
@@ -21,6 +22,8 @@ install:
 	$(INSTALL_SH) -m 0755 xmonad-log-applet $(DESTDIR)${libdir}/gnome-applets
 	$(INSTALL_SH) -m 0644 xmonad-log-applet.server $(DESTDIR)$(serverdir)
 	$(INSTALL_SH) -m 0644 xmonad48.png $(DESTDIR)$(datarootdir)/icons/hicolor/48x48/apps
+	$(INSTALL_SH) -m 0644 xmonad-log-applet.schema $(DESTDIR)$(datarootdir)/gconf/schemas
+
 
 xmonad-log-applet: main.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ main.c $(LIBS)
@@ -32,4 +35,5 @@ xmonad-log-applet.server: xmonad-log-applet.server.in
 clean:
 	rm -f xmonad-log-applet xmonad-log-applet.server
 
-
+install-data-local:
+	GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source` gconftool-2 --makefile-install-rule xmonad-log-applet.schema

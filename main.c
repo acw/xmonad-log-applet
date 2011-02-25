@@ -5,6 +5,7 @@
 #include <panel-applet.h>
 #include <gtk/gtklabel.h>
 #include <dbus/dbus-glib.h>
+#include <gconf/gconf-client.h>
 #include <stdlib.h>
 
 /* AW: I pulled this code off the interwebs. It makes background 
@@ -42,7 +43,7 @@ void change_bg(PanelApplet *applet, PanelAppletBackgroundType type,
 
 static void signal_handler(DBusGProxy *obj, const char *msg, GtkWidget *widget)
 {
-  gtk_label_set_markup(GTK_LABEL(widget), msg);
+    gtk_label_set_markup(GTK_LABEL(widget), msg);
 }
 
 static void set_up_dbus_transfer(GtkWidget *buf)
@@ -68,12 +69,48 @@ static void set_up_dbus_transfer(GtkWidget *buf)
                               buf, NULL);
 }
 
+void xmonadlog_applet_size_change(GConfClient *client,
+                                  guint cnxn_id,
+                                  GConfEntry *entry,
+                                  gpointer user_data) {
+    gint width = gconf_client_get_int (client,
+                                        "/apps/xmonad-log-applet/width-chars",
+                                        NULL);
+    gtk_label_set_width_chars(GTK_LABEL(user_data), width);
+}
+
 static gboolean xmonadlog_applet_fill(PanelApplet *applet)
 {
   GtkWidget *label = gtk_label_new("Waiting for XMonad");
 
+  // Set up Gconf
+  GConfClient* client = gconf_client_get_default();
+  gconf_client_add_dir(client,
+                       "/apps/xmonad-log-applet",
+                       GCONF_CLIENT_PRELOAD_NONE,
+                       NULL);
+
+  gconf_client_notify_add(client,
+                          "/apps/xmonad-log-applet/width-chars",
+                          xmonadlog_applet_size_change,
+                          label,
+                          NULL,
+                          NULL);
+
+  GConfValue* gcValue = NULL;
+  gcValue = gconf_client_get(client,
+                             "/apps/xmonad-log-applet/width-chars",
+                             NULL);
+  int width = 80;
+  if (gcValue && gcValue->type == GCONF_VALUE_INT) {
+      width = gconf_value_get_int(gcValue);
+  }
+  gtk_label_set_width_chars(GTK_LABEL(label), width);
+
   gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+  gtk_misc_set_alignment((GtkMisc *)label, 0.0, 0.5);
   set_up_dbus_transfer(label);
+
   g_signal_connect(applet, "change-background", G_CALLBACK(change_bg), NULL);
   gtk_container_add(GTK_CONTAINER(applet), label);
   gtk_widget_show_all(GTK_WIDGET(applet));

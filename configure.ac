@@ -56,6 +56,7 @@ AC_INIT([XMonad Log Applet], [1.0.0], [awick@uhsure.com], [xmonad-log-applet])
 
 AC_PREFIX_DEFAULT(/usr)
 # standard compilers and tools
+AM_INIT_AUTOMAKE
 AC_PROG_CC
 AC_PROG_SED
 AC_PROG_INSTALL
@@ -63,6 +64,9 @@ AC_HEADER_STDC
 # The only standard headers we use are string.h and stdlib.h, both
 # of which are checked by AC_HEADER_STDC. So now it's only the gnome
 # and dbus stuff.
+
+AC_CHECK_HEADERS([string.h])
+AC_CHECK_HEADERS([string.h])
 
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.20.0)
 AC_SUBST(GLIB_CFLAGS)
@@ -75,6 +79,11 @@ AC_SUBST(DBUS_GLIB_LIBS)
 PKG_CHECK_MODULES(LIBPANEL, libpanelapplet-2.0 >= 2.26.0)
 AC_SUBST(LIBPANEL_CFLAGS)
 AC_SUBST(LIBPANEL_LIBS)
+
+PKG_CHECK_MODULES(GCONF, gconf-2.0 >= 2.26.0)
+AC_SUBST(GCONF_CFLAGS)
+AC_SUBST(GCONF_LIBS)
+
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
