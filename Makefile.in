@@ -9,6 +9,7 @@ exec_prefix = @exec_prefix@
 libdir = @libdir@
 libexecdir = @libexecdir@
 datarootdir = @datarootdir@
+sysconfdir = @sysconfdir@
 serverdir = $(libdir)/bonobo/servers
 
 DESTDIR?=
@@ -22,8 +23,7 @@ install:
 	$(INSTALL_SH) -m 0755 xmonad-log-applet $(DESTDIR)${libdir}/gnome-applets
 	$(INSTALL_SH) -m 0644 xmonad-log-applet.server $(DESTDIR)$(serverdir)
 	$(INSTALL_SH) -m 0644 xmonad48.png $(DESTDIR)$(datarootdir)/icons/hicolor/48x48/apps
-	$(INSTALL_SH) -m 0644 xmonad-log-applet.schema $(DESTDIR)$(datarootdir)/gconf/schemas
-
+	$(INSTALL_SH) -m 0644 xmonad-log-applet.schema $(DESTDIR)$(sysconfdir)/gconf/schemas
 
 xmonad-log-applet: main.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ main.c $(LIBS)

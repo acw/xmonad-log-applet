@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<gconfschemafile>
+ <schemalist>
+   <schema>
+     <key>/schemas/apps/xmonad-log-applet/width-chars</key>
+     <applyto>/apps/xmonad-log-applet/width-chars</applyto>
+     <owner>xmonad-log-applet</owner>
+     <type>int</type>
+     <default>80</default>
+     <locale name="C">
+       <short>widht-chars</short>
+       <long>The applets width in characters.</long>
+     </locale>
+   </schema>
+ </schemalist>
+</gconfschemafile>
